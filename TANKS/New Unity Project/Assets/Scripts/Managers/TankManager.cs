@@ -63,4 +63,12 @@ public class TankManager
         m_Instance.SetActive(false);
         m_Instance.SetActive(true);
     }
+
+	public void ActivateShooter() {
+		m_Shooting.ActivateShooter ();
+	}
+
+	public void DeactivateShooter() {
+		m_Shooting.DeactivateShooter ();
+	}
 }

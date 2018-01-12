@@ -18,7 +18,10 @@ public class GameManager : MonoBehaviour
     private WaitForSeconds m_StartWait;     
     private WaitForSeconds m_EndWait;       
     private TankManager m_RoundWinner;
-    private TankManager m_GameWinner;       
+    private TankManager m_GameWinner;
+	private int m_ShooterNumber;
+	private float m_ShotTimer;
+	private float m_ShotLimit = 3f;
 
 
     private void Start()
@@ -29,9 +32,19 @@ public class GameManager : MonoBehaviour
         SpawnAllTanks();
         SetCameraTargets();
 
+		m_ShooterNumber = 0;
+
         StartCoroutine(GameLoop());
     }
 
+
+	private void Update() {
+		m_ShotTimer += Time.deltaTime;
+
+		if (m_ShotTimer >= m_ShotLimit) {
+			SwitchActiveShooter();
+		}
+	}
 
     private void SpawnAllTanks()
     {
@@ -92,6 +105,8 @@ public class GameManager : MonoBehaviour
     private IEnumerator RoundPlaying()
     {
 		EnableTankControl ();
+		SwitchActiveShooter ();
+		m_ShotTimer = 0f;
 
 		m_MessageText.text = string.Empty;
 
@@ -206,4 +221,21 @@ public class GameManager : MonoBehaviour
             m_Tanks[i].DisableControl();
         }
     }
+
+	public void SwitchActiveShooter()
+	{
+		m_ShooterNumber++;
+		if (m_ShooterNumber >= m_Tanks.Length) {
+			m_ShooterNumber = 0;
+		}
+
+		for (int i = 0; i < m_Tanks.Length; i++)
+		{
+			m_Tanks [i].DeactivateShooter ();
+		}
+
+		m_Tanks [m_ShooterNumber].ActivateShooter ();
+
+		m_ShotTimer = 0f;
+	}
 }
