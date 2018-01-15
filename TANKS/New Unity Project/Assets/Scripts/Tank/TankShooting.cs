@@ -11,6 +11,7 @@ public class TankShooting : MonoBehaviour
     public AudioClip m_ChargingClip;     
     public AudioClip m_FireClip;         
 	public Image m_ShooterIcon;
+	public Slider m_HealthSlider;
     public float m_MinLaunchForce = 15f; 
     public float m_MaxLaunchForce = 30f; 
     public float m_MaxChargeTime = 0.75f;
@@ -88,11 +89,13 @@ public class TankShooting : MonoBehaviour
 
 	public void DeactivateShooter() {
 		m_ShooterIcon.enabled = false;
+		m_HealthSlider.gameObject.SetActive (false);
 		m_ActiveShooter = false;
 	}
 
 	public void ActivateShooter() {
 		m_ShooterIcon.enabled = true;
+		m_HealthSlider.gameObject.SetActive (true);
 		m_ActiveShooter = true;
 	}
 }
