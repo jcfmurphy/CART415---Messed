@@ -9,11 +9,13 @@ public class TankMovement : MonoBehaviour
     public AudioClip m_EngineIdling;       
     public AudioClip m_EngineDriving;      
     public float m_PitchRange = 0.2f;
+	public ParticleSystem m_LeftDustTrail;
+	public ParticleSystem m_RightDustTrail;
 
     
     private string m_MovementAxisName;     
     private string m_TurnAxisName;         
-    private Rigidbody m_Rigidbody;         
+    private Rigidbody m_Rigidbody;
     private float m_MovementInputValue;    
     private float m_TurnInputValue;        
     private float m_OriginalPitch;         
@@ -56,6 +58,19 @@ public class TankMovement : MonoBehaviour
 		m_TurnInputValue = Input.GetAxis (m_TurnAxisName);
 
 		EngineAudio ();
+
+		//update dust trail particle systems
+		if (Mathf.Abs (m_MovementInputValue) > 0.1f || Mathf.Abs (m_TurnInputValue) > 0.1f) {
+			UpdateParticleSystem (m_LeftDustTrail, true);
+			UpdateParticleSystem (m_RightDustTrail, true);
+		} else {
+			UpdateParticleSystem (m_LeftDustTrail, false);
+			UpdateParticleSystem (m_RightDustTrail, false);
+		}
+
+		if (m_Rigidbody.velocity.magnitude > 0.0000001) {
+			print (m_Rigidbody.velocity.magnitude);
+		}
 	}
 
 
@@ -108,4 +123,12 @@ public class TankMovement : MonoBehaviour
 
 		m_Rigidbody.MoveRotation (m_Rigidbody.rotation * turnRotation);
     }
+
+	private void UpdateParticleSystem (ParticleSystem particleSystem, bool shouldBePlaying) {
+		if (particleSystem.isPlaying && !shouldBePlaying) {
+			particleSystem.Stop ();
+		} else if (!particleSystem.isPlaying && shouldBePlaying) {
+			particleSystem.Play ();
+		}
+	}
 }

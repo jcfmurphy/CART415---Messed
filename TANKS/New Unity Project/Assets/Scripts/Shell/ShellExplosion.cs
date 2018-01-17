@@ -4,7 +4,8 @@ public class ShellExplosion : MonoBehaviour
 {
     public LayerMask m_TankMask;
     public ParticleSystem m_ExplosionParticles;       
-    public AudioSource m_ExplosionAudio;              
+    public AudioSource m_ExplosionAudio;       
+	public Light m_ShotLight;
     public float m_MaxDamage = 100f;                  
     public float m_ExplosionForce = 1000f;            
     public float m_MaxLifeTime = 2f;                  
@@ -47,6 +48,10 @@ public class ShellExplosion : MonoBehaviour
 		m_ExplosionParticles.Play ();
 
 		m_ExplosionAudio.Play ();
+
+		Vector3 lightPosition = new Vector3(transform.position.x, transform.position.y + 5.0f, transform.position.z);
+
+		Instantiate (m_ShotLight, lightPosition, transform.rotation);
 
 		Destroy (m_ExplosionParticles.gameObject, m_ExplosionParticles.duration);
 
